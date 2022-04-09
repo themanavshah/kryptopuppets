@@ -8,12 +8,12 @@ contract ERC721Enumerable is ERC721 {
 
     mapping(uint256 => uint256) private _allTokenIndex;
     mapping(address => uint256[]) private _ownedTokens;
-    mapping(uint256 => uint256) private _ownedTokenIndex;
+    mapping(uint256 => uint256) private _ownedTokensIndex;
 
     /// @notice Count NFTs tracked by this contract
     /// @return uint256 A count of valid NFTs tracked by this contract, where each one of
     ///  them has an assigned and queryable owner not equal to the zero address
-    function totalSupply() external view returns (uint256) {
+    function totalSupply() public view returns (uint256) {
         return _allTokens.length;
     }
 
@@ -40,10 +40,37 @@ contract ERC721Enumerable is ERC721 {
     function _mint(address to, uint256 tokenId) internal override(ERC721) {
         super._mint(to, tokenId);
 
-        _addTokensToTotalSupply(tokenId);
+        _addTokensToAllEnumeration(tokenId);
+        _addTokensToOwnerEnumeration(to, tokenId);
     }
 
-    function _addTokensToTotalSupply(uint256 tokenId) private {
+    function _addTokensToAllEnumeration(uint256 tokenId) private {
+        _allTokenIndex[tokenId] = _allTokens.length;
         _allTokens.push(tokenId);
+    }
+
+    function _addTokensToOwnerEnumeration(address to, uint256 tokenId) private {
+        _ownedTokensIndex[tokenId] = _ownedTokens[to].length;
+        _ownedTokens[to].push(tokenId);
+    }
+
+    function tokenOfOwnerByIndex(uint256 index, address owner)
+        public
+        view
+        returns (uint256)
+    {
+        require(
+            index < balanceOf(owner),
+            "Owner's Index is out of bound in tokenOfOwnerByIndex() function."
+        );
+        return _ownedTokens[owner][index];
+    }
+
+    function tokenByIndex(uint256 index) public view returns (uint256) {
+        require(
+            index < totalSupply(),
+            "Global index is out of bound in tokenByIndex() function."
+        );
+        return _allTokens[index];
     }
 }
