@@ -4,8 +4,8 @@ const Web3 = require('web3');
 const compiledFactory = require('./build/KryptoPuppet.json');
 
 const provider = new HDWalletProvider(
-    'okay mother hurry quick laugh arena barrel scare prepare faith because blind',
-    'https://rinkeby.infura.io/v3/5c98c4ca077043c1b9a0c80794958eba'
+    `${WALLET_KEY_PHASE}`,
+    `https://rinkeby.infura.io/v3/${INFURA_API_KEY}`
 );
 
 const web3 = new Web3(provider);
