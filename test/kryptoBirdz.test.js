@@ -4,7 +4,7 @@ const Web3 = require('web3');
 
 const web3 = new Web3(ganache.provider());
 
-const compiledKryptoPupz = require('../ethereum/build/KryptoPuppet.json');
+const compiledKryptoPupz = require('../src/ethereum/build/KryptoPuppet.json');
 
 let accounts;
 let kryptoPupz;
